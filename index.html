@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#111827" />
+<link rel="icon" sizes="192x192" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<title>Planner — PWA</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<noscript>Questa app richiede JavaScript per funzionare correttamente.</noscript>
+
+<header id="hero" class="hero">
+  <div class="inner">
+    <h1 id="title" contenteditable="true">OAXACA 2025</h1>
+    <div class="actions">
+      <button class="btn btn-dark" id="btnAdd">+ Aggiungi giorno</button>
+      <button class="btn btn-blue" id="btnUpload">Carica sfondo…</button>
+      <button class="btn btn-rose" id="btnPrev">◀︎</button>
+      <button class="btn btn-rose" id="btnNext">▶︎</button>
+    </div>
+    <div class="hint">Apri questo link in Safari e poi “Aggiungi alla schermata Home” per la modalità app.</div>
+    <input id="bgInput" class="hidden" type="file" accept="image/*" multiple />
+    <div id="bgGallery" class="bg-gallery"></div>
+  </div>
+</header>
+
+<main>
+  <div class="toolbar">
+    <button class="btn btn-amber" id="btnExport">Esporta (salva .html)</button>
+    <button class="btn btn-amber" id="btnClear">Svuota tutti i giorni</button>
+    <button class="btn btn-blue" id="btnInstall" style="display:none">Installa App</button>
+  </div>
+  <div id="planner"></div>
+</main>
+
+<script defer src="script.js"></script>
+</body>
+</html>

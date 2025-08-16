@@ -1,0 +1,37 @@
+:root{
+  --maxw: 920px;
+  --shadow: 0 8px 24px rgba(0,0,0,.12);
+  --radius: 14px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:#f6f7fb;color:#222}
+.hidden{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.hero{position:relative;height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:18px;background:#111;background-size:cover;background-position:center}
+.hero::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.hero .inner{position:relative;z-index:1;width:100%;max-width:var(--maxw);padding:0 16px}
+.hero h1{margin:0 0 8px;font-size:32px;letter-spacing:.5px;text-shadow:0 6px 14px rgba(0,0,0,.4)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.btn{border:0;padding:10px 16px;border-radius:999px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+.btn-dark{background:#111827;color:#fff}
+.btn-blue{background:#2563eb;color:#fff}
+.btn-rose{background:#e11d48;color:#fff}
+.btn-amber{background:#f59e0b;color:#111}
+.hint{font-size:12px;opacity:.9;margin-top:8px}
+main{max-width:var(--maxw);margin:20px auto 80px;padding:0 16px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.day{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:18px}
+.day h2{margin:0;font-size:18px}
+.row{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+.card{border-radius:12px;padding:12px}
+.card h3{margin:0 0 6px;font-size:14px}
+.visit{background:linear-gradient(135deg,#e0f2fe,#f0f9ff)}
+.stay{background:linear-gradient(135deg,#dcfce7,#f0fff4)}
+.move{background:linear-gradient(135deg,#ffedd5,#fff7ed)}
+.notes{background:linear-gradient(135deg,#fde68a,#fff7cc)}
+.tools{display:flex;gap:8px;margin-top:10px}
+.tool{border:1px solid rgba(0,0,0,.08);background:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
+[contenteditable]{outline:none}
+@media (min-width:780px){ .row{grid-template-columns:repeat(2,1fr)} }
+.bg-gallery{display:flex;gap:8px;overflow:auto;padding:8px 0}
+.bg-thumb{width:64px;height:44px;border-radius:8px;flex:0 0 auto;box-shadow:0 2px 8px rgba(0,0,0,.15);background-size:cover;background-position:center;border:2px solid transparent}
+.bg-thumb.active{border-color:#fff}
