@@ -1,37 +1,84 @@
-:root{
-  --maxw: 920px;
-  --shadow: 0 8px 24px rgba(0,0,0,.12);
-  --radius: 14px;
-}
+:root{--shadow:0 10px 30px rgba(0,0,0,.25);--radius:16px}
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:#f6f7fb;color:#222}
-.hidden{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.hero{position:relative;height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:18px;background:#111;background-size:cover;background-position:center}
-.hero::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.35)}
-.hero .inner{position:relative;z-index:1;width:100%;max-width:var(--maxw);padding:0 16px}
-.hero h1{margin:0 0 8px;font-size:32px;letter-spacing:.5px;text-shadow:0 6px 14px rgba(0,0,0,.4)}
-.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.btn{border:0;padding:10px 16px;border-radius:999px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
-.btn-dark{background:#111827;color:#fff}
-.btn-blue{background:#2563eb;color:#fff}
-.btn-rose{background:#e11d48;color:#fff}
-.btn-amber{background:#f59e0b;color:#111}
-.hint{font-size:12px;opacity:.9;margin-top:8px}
-main{max-width:var(--maxw);margin:20px auto 80px;padding:0 16px}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
-.day{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:18px}
-.day h2{margin:0;font-size:18px}
-.row{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
-.card{border-radius:12px;padding:12px}
-.card h3{margin:0 0 6px;font-size:14px}
-.visit{background:linear-gradient(135deg,#e0f2fe,#f0f9ff)}
-.stay{background:linear-gradient(135deg,#dcfce7,#f0fff4)}
-.move{background:linear-gradient(135deg,#ffedd5,#fff7ed)}
-.notes{background:linear-gradient(135deg,#fde68a,#fff7cc)}
-.tools{display:flex;gap:8px;margin-top:10px}
-.tool{border:1px solid rgba(0,0,0,.08);background:#fff;border-radius:10px;padding:6px 10px;cursor:pointer}
-[contenteditable]{outline:none}
-@media (min-width:780px){ .row{grid-template-columns:repeat(2,1fr)} }
-.bg-gallery{display:flex;gap:8px;overflow:auto;padding:8px 0}
-.bg-thumb{width:64px;height:44px;border-radius:8px;flex:0 0 auto;box-shadow:0 2px 8px rgba(0,0,0,.15);background-size:cover;background-position:center;border:2px solid transparent}
-.bg-thumb.active{border-color:#fff}
+
+/* Shared Oaxaca title */
+.title-common{
+  font-family:'Rye',cursive;
+  color:#fff7ec;
+  -webkit-text-stroke:3px #b80f0a;
+  text-shadow:0 6px 18px rgba(0,0,0,.7),0 2px 2px rgba(0,0,0,.5);
+  letter-spacing:1px;
+}
+
+/* Hamburger menu */
+.menu{position:relative; display:inline-block;}
+.menu-btn{appearance:none; border:0; background:none; color:#fff; cursor:pointer; font-size:24px; line-height:1; padding:6px 10px; text-shadow:1px 1px 4px rgba(0,0,0,.7)}
+.menu-list{position:absolute; right:0; top:100%; min-width:240px; background:rgba(0,0,0,.85); color:#fff; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,.35); padding:8px; margin-top:6px; display:none; z-index:10; backdrop-filter: blur(6px)}
+.menu.open .menu-list{display:block}
+.menu-item{ display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; cursor:pointer; }
+.menu-item:hover{ background:rgba(255,255,255,.08); }
+.menu-sep{ height:1px; background:rgba(255,255,255,.12); margin:6px 4px; }
+.menu-item label{ cursor:pointer; color:#fff; }
+.menu-item select{ background:transparent; color:#fff; border:1px solid #fff3; border-radius:6px; padding:2px 6px; }
+
+/* Intro */
+.intro-body{
+  margin:0; min-height:100vh; display:flex; flex-direction:column; align-items:center;
+  background:#000; background-size:cover; background-repeat:no-repeat; background-position:center;
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;
+}
+.intro-topbar{ position:fixed; top:12px; right:12px; z-index:5; }
+.intro-title{ margin:10vh 0 48px; font-size:clamp(56px,9vw,112px); text-align:center }
+.intro-links{ display:flex; flex-direction:column; align-items:center; gap:12px }
+.link{ font-size:1.2em; color:#fff; text-decoration:none; cursor:pointer; background:none; border:0; padding:6px 12px; text-shadow:1px 1px 4px rgba(0,0,0,.7) }
+.link:hover{ text-decoration:underline }
+.hidden-input{ display:none }
+
+/* Planner */
+body.planner-body{
+  margin:0; min-height:100vh; background:#000; background-size:cover; background-repeat:no-repeat; background-position:center;
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif; color:#111;
+}
+.topbar{ position:sticky; top:0; z-index:5; margin:16px; padding:14px 18px; display:flex; align-items:center; gap:12px; justify-content:space-between }
+.title{ font-size:clamp(36px,6vw,64px) }
+.actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+.link-white{ appearance:none; border:0; background:none; padding:6px 10px; color:#fff; font-weight:600; cursor:pointer; text-shadow:1px 1px 4px rgba(0,0,0,.7) }
+.link-white:hover{ text-decoration:underline }
+
+main{ padding:24px 16px 80px; max-width:980px; margin:0 auto }
+.day{ background:rgba(255,255,255,.9); backdrop-filter:blur(4px); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px; margin:14px 0 }
+.day-head{ display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; border-bottom:1px dashed rgba(0,0,0,.1); padding-bottom:8px }
+.day-date{ display:flex; align-items:center; gap:10px; flex-wrap:wrap }
+.date-input{ font-size:18px; padding:6px 8px; border-radius:8px; border:1px solid rgba(0,0,0,.15); background:rgba(255,255,255,.95) }
+.date-display{ font-size:22px; font-weight:800; color:#111; cursor:pointer }
+.day-num{ font-size:12px; color:#374151; justify-self:end }
+.row{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px }
+.card{ border-radius:12px; padding:12px; background:#fff }
+.card h3{ margin:0 0 6px; font-size:14px; color:#111 }
+.card ul{ margin-top:6px }
+ul{ margin:0; padding-left:20px }
+[contenteditable]{ outline:none }
+.tools{ display:flex; gap:8px; margin-top:10px }
+.tool{ border:1px solid rgba(0,0,0,.08); background:#fff; border-radius:10px; padding:6px 10px; cursor:pointer }
+
+/* Section colors */
+.card.visit{ background:linear-gradient(135deg,#b3e5fc,#e1f5fe) }
+.card.stay{  background:linear-gradient(135deg,#c8e6c9,#e8f5e9) }
+.card.move{  background:linear-gradient(135deg,#ffe0b2,#fff3e0) }
+.card.notes{ background:linear-gradient(135deg,#fff59d,#fff9c4) }
+
+@media (min-width:780px){ .row{ grid-template-columns:repeat(2,1fr) } }
+
+/* Thumbs + Viewer */
+.attach-thumb{ max-width:140px; max-height:110px; border-radius:8px; display:inline-block; margin:6px 6px 0 0 }
+.viewer{ position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; align-items:center; justify-content:center; z-index:9999 }
+.viewer.open{ display:flex }
+.viewer .inner{ max-width:90vw; max-height:90vh; background:#000; border-radius:8px; overflow:hidden; position:relative }
+.viewer img,.viewer iframe{ max-width:90vw; max-height:90vh; display:block }
+.viewer .close{ position:absolute; top:8px; right:12px; background:rgba(255,255,255,.15); color:#fff; border:0; border-radius:6px; padding:8px 10px; cursor:pointer }
+
+/* Undo toast */
+.undo-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+background:#333;color:#fff;padding:10px 14px;border-radius:10px;z-index:100000;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.undo-toast button{margin-left:10px;background:#fff;color:#333;border:none;
+padding:4px 8px;cursor:pointer;border-radius:6px;}

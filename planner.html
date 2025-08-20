@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Planner — OAXACA 2025</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="planner-body">
+  <div class="topbar">
+    <h1 class="title-common title">OAXACA 2025</h1>
+    <div class="actions">
+      <a href="index.html" class="link-white">Torna all'inizio</a>
+      <button class="link-white" id="btnAdd">Aggiungi giorno</button>
+
+      <div class="menu" id="plannerMenu">
+        <button class="menu-btn" aria-label="Menu">☰</button>
+        <div class="menu-list">
+          <div class="menu-item" id="plUpload">Carica sfondo</div>
+          <div class="menu-item" id="plFit">Adatta sfondo: <span id="plFitState">Riempie</span></div>
+          <div class="menu-item" id="plMove">Sposta sfondo: <span id="plMoveState">Off</span></div>
+          <div class="menu-sep"></div>
+          <div class="menu-item">
+            <label for="langSelect">Lingua:</label>
+            <select id="langSelect">
+              <option value="it" selected>Italiano</option>
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <input id="bgInput" type="file" accept="image/*" class="hidden-input">
+    </div>
+  </div>
+
+  <div class="viewer" id="viewer">
+    <div class="inner">
+      <button class="close" id="viewerClose">Chiudi</button>
+      <div id="viewerContent"></div>
+    </div>
+  </div>
+
+  <main id="planner"></main>
+
+  <script src="script.js"></script>
+</body>
+</html>
