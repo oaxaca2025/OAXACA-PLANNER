@@ -92,7 +92,7 @@
     const editor = input.closest('.day').querySelector('.editor');
     const files=input.files; if(!files||!files.length) return;
     Array.from(files).forEach(file=>{
-      if(file.type.startsWith('image/')){
+      if(file.type.startsWith('image')){
         const r=new FileReader();
         r.onload=e=>{ const img=new Image();
           img.onload=()=> compressAndStoreImage(img, file.name, (id,blobURL)=>{

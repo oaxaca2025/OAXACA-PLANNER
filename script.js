@@ -1,4 +1,4 @@
-// Script base per gestione giorni + allegati inline
+// Gestione giorni + wiring allegati inline
 function createDay(n){
   const wrap = document.createElement('div');
   wrap.className='day';
