@@ -1,0 +1,15 @@
+/* Overlay viewer (immagini + PDF) */
+.viewer{ position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:9999 }
+.viewer.open{ display:flex }
+.viewer .inner{ width:92vw; height:92vh; background:#000; border-radius:10px; overflow:hidden; position:relative; display:flex; flex-direction:column; }
+.viewer .vtoolbar{ display:flex; gap:8px; align-items:center; justify-content:flex-end; background:rgba(0,0,0,.55); padding:8px; }
+.viewer .vbtn{ background:rgba(255,255,255,.12); color:#fff; border:0; border-radius:6px; padding:8px 10px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; }
+.viewer .vbtn.close{ margin-left:auto; }
+.viewer #viewerContent{ flex:1; position:relative; overflow:hidden; background:#111; }
+.viewer .stage{ position:absolute; left:50%; top:50%; transform:translate(calc(-50%),calc(-50%)) scale(1) rotate(0deg); transform-origin:center center; }
+.viewer img.stage-img{ max-width:100%; max-height:100%; object-fit:contain; display:block; image-orientation: from-image; }
+.viewer embed, .viewer iframe{ width:100%; height:100%; border:0; display:block; background:#111; }
+/* Miniature nell’editor */
+.editor img.attach-thumb{ max-width:120px; max-height:110px; border-radius:6px; vertical-align:middle; margin:4px 6px 0 0; cursor:pointer; image-orientation: from-image; }
+.editor a[data-attach-id]{ color:#0b5; text-decoration:underline; cursor:pointer; }
+.controls input[type="file"]{ display:none; }

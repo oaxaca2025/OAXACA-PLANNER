@@ -1,51 +1,42 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Planner — OAXACA 2025</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Planner</title>
+  <!-- I TUOI CSS ESISTENTI QUI -->
+  <link rel="stylesheet" href="viewer.css" />
 </head>
-<body class="planner-body">
-  <div class="topbar">
-    <h1 class="title-common title">OAXACA 2025</h1>
-    <div class="actions">
-      <a href="index.html" class="link-white">Torna all'inizio</a>
-      <button class="link-white" id="btnAdd">Aggiungi giorno</button>
-
-      <div class="menu" id="plannerMenu">
-        <button class="menu-btn" aria-label="Menu">☰</button>
-        <div class="menu-list">
-          <div class="menu-item" id="plUpload">Carica sfondo</div>
-          <div class="menu-item" id="plFit">Adatta sfondo: <span id="plFitState">Riempie</span></div>
-          <div class="menu-item" id="plMove">Sposta sfondo: <span id="plMoveState">Off</span></div>
-          <div class="menu-sep"></div>
-          <div class="menu-item">
-            <label for="langSelect">Lingua:</label>
-            <select id="langSelect">
-              <option value="it" selected>Italiano</option>
-              <option value="en">English</option>
-              <option value="es">Español</option>
-            </select>
-          </div>
-        </div>
+<body>
+  <div id="app">
+    <header class="bar">
+      <h2>Planner di viaggio</h2>
+      <div class="actions">
+        <button class="primary" id="btnAdd" type="button">➕ Aggiungi giorno</button>
       </div>
-      <input id="bgInput" type="file" accept="image/*" class="hidden-input">
-    </div>
+    </header>
+    <main id="planner" aria-live="polite"></main>
   </div>
 
+  <!-- Viewer overlay -->
   <div class="viewer" id="viewer">
     <div class="inner">
-      <button class="close" id="viewerClose">Chiudi</button>
+      <div class="vtoolbar">
+        <button class="vbtn" id="vtFit" title="Adatta">⤢</button>
+        <button class="vbtn" id="vtZoomIn" title="Zoom +">＋</button>
+        <button class="vbtn" id="vtZoomOut" title="Zoom −">－</button>
+        <button class="vbtn" id="vtRotate" title="Ruota">⟳</button>
+        <button class="vbtn" id="vtNewTab" title="Apri in nuova scheda">↗︎</button>
+        <a class="vbtn" id="vtDownload" title="Scarica" download>⬇︎</a>
+        <button class="vbtn close" id="viewerClose" title="Chiudi">✕</button>
+      </div>
       <div id="viewerContent"></div>
     </div>
   </div>
 
-  <main id="planner"></main>
-
+  <!-- I TUOI JS ESISTENTI QUI -->
+  <script src="viewer.js"></script>
+  <script src="attachments-indexeddb.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
