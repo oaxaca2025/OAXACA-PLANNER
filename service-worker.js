@@ -1,4 +1,4 @@
-const CACHE_NAME = 'planner-cache-v105r2pwa-fixed';
+const CACHE_NAME = 'planner-cache-v105r2pwa-fixed-v2';
 const ASSETS = [
   './',
   './index.html',
