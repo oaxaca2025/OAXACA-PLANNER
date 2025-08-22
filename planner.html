@@ -1,53 +1,42 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="UTF-8">
   <title>Planner</title>
-
-  <!-- (1) CSS del tema se presente nella repo -->
-  <link rel="stylesheet" href="style.css?v=iv7">
-
-  <!-- (2) CSS del viewer -->
-  <link rel="stylesheet" href="viewer.css?v=iv7">
-
-  <!-- (3) Fallback CSS elegante -->
-  <style id="fallback-css">
-    :root{ --bg:#0b0b0b; --fg:#f3f4f6; --muted:#a1a1aa; --accent:#f87171; --card:#141414; --line:#242424; }
-    html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    .bar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;background:linear-gradient(180deg,#101010,#0b0b0b);border-bottom:1px solid var(--line)}
-    .bar h2{margin:0;font-size:22px;letter-spacing:.3px}
-    .actions{display:flex;gap:10px}
-    .primary{appearance:none;border:0;border-radius:12px;background:var(--accent);color:#111;padding:10px 14px;font-weight:700;cursor:pointer}
-    .primary:active{transform:translateY(1px)}
-    #planner{max-width:980px;margin:26px auto;padding:0 16px}
-    .day{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 14px;margin:14px 0;box-shadow:0 6px 18px rgba(0,0,0,.25)}
-    .day h3{margin:0 0 10px 0;font-size:20px}
-    .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
-    .btn{appearance:none;border:1px solid var(--line);background:#1e1e1e;color:var(--fg);border-radius:10px;padding:8px 12px;cursor:pointer}
-    .btn:active{transform:translateY(1px)}
-    input[type="file"]{font-size:14px}
-    .a-preview{display:inline-block;padding:6px 10px;border-radius:8px;background:#111;border:1px dashed var(--line);color:var(--muted);text-decoration:none;margin-top:8px}
-  </style>
-  <script>
-    window.addEventListener('load', () => {
-      const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-      if (accent) { const f = document.getElementById('fallback-css'); if (f) f.remove(); }
-    });
-  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- CSS aggiuntivo per il visualizzatore (patch) -->
+  <link rel="stylesheet" href="viewer.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0b">
 </head>
-<body>
-  <div id="app">
-    <header class="bar">
-      <h2>Planner di viaggio</h2>
-      <div class="actions">
-        <button class="primary" id="btnAdd" type="button">➕ Aggiungi giorno</button>
+<body class="intro-body">
+  <!-- Topbar e controlli identici alla home, per stesso look & feel e stesso background -->
+  <div class="intro-topbar">
+    <div class="menu" id="introMenu">
+      <button class="menu-btn" aria-label="Menu">☰</button>
+      <div class="menu-list">
+        <div class="menu-item" id="introUpload">Carica foto</div>
+        <div class="menu-item" id="introFit">Adatta sfondo: <span id="introFitState">Riempie</span></div>
+        <div class="menu-item" id="introMove">Sposta sfondo: <span id="introMoveState">Off</span></div>
       </div>
-    </header>
-    <main id="planner" aria-live="polite"></main>
+    </div>
+    <input id="fileInput" class="hidden-input" type="file" accept="image/*">
   </div>
 
+  <header class="bar" style="margin-top: 56px;">
+    <h2 class="title-common">Planner di viaggio</h2>
+    <div class="actions">
+      <button class="primary" id="btnAdd" type="button">➕ Aggiungi giorno</button>
+    </div>
+  </header>
+
+  <main id="planner" aria-live="polite"></main>
+
+  <!-- Viewer overlay (immagini/PDF) -->
   <div class="viewer" id="viewer" aria-hidden="true">
     <div class="inner">
       <div class="vtoolbar">
@@ -63,8 +52,83 @@
     </div>
   </div>
 
-  <script src="attachments-indexeddb.js?v=iv7"></script>
-  <script src="viewer.js?v=iv7"></script>
-  <script src="script.js?v=iv7"></script>
+  <!-- Script di gestione sfondo/topbar identico alla home -->
+  <script>
+  const BG='plannerBackground', MODE='plannerBgMode', POSX='plannerBgX', POSY='plannerBgY';
+  const body=document.body;
+  const menu=document.getElementById('introMenu');
+  const btn=menu.querySelector('.menu-btn');
+  const fileInput=document.getElementById('fileInput');
+  const itemUpload=document.getElementById('introUpload');
+  const itemFit=document.getElementById('introFit');
+  const itemMove=document.getElementById('introMove');
+  const fitState=document.getElementById('introFitState');
+  const moveState=document.getElementById('introMoveState');
+
+  btn.addEventListener('click', function(){ menu.classList.toggle('open'); });
+  document.addEventListener('click', function(e){ if(!menu.contains(e.target)) menu.classList.remove('open'); });
+
+  var moving=false, startX=0, startY=0, baseX=parseInt(localStorage.getItem(POSX)||'50'), baseY=parseInt(localStorage.getItem(POSY)||'50');
+
+  function applyBg(){
+    var saved=localStorage.getItem(BG);
+    if(saved) body.style.backgroundImage='url('+saved+')';
+    var mode=localStorage.getItem(MODE)||'cover';
+    body.style.backgroundSize=mode;
+    body.style.backgroundPosition=baseX+'% '+baseY+'%';
+    fitState.textContent = mode==='cover'?'Riempie':'Contiene';
+    moveState.textContent = moving?'On':'Off';
+  }
+  applyBg();
+
+  itemUpload.addEventListener('click', function(){ fileInput.click(); });
+  fileInput.addEventListener('change', function(e){
+    var f=e.target.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(ev){ var img=ev.target.result; body.style.backgroundImage='url('+img+')'; localStorage.setItem(BG,img); };
+    r.readAsDataURL(f);
+  });
+
+  itemFit.addEventListener('click', function(){
+    var cur=localStorage.getItem(MODE)||'cover';
+    var nxt=cur==='cover'?'contain':'cover';
+    localStorage.setItem(MODE, nxt);
+    applyBg();
+  });
+
+  itemMove.addEventListener('click', function(){ moving=!moving; applyBg(); });
+
+  function onDown(e){ if(!moving) return; startX=e.clientX; startY=e.clientY; body.dataset.drag='1'; }
+  function onMove(e){
+    if(!moving || !body.dataset.drag) return;
+    var dx=e.clientX-startX, dy=e.clientY-startY;
+    var nx=Math.max(0, Math.min(100, baseX + dx*0.1));
+    var ny=Math.max(0, Math.min(100, baseY + dy*0.1));
+    body.style.backgroundPosition=nx+'% '+ny+'%';
+  }
+  function onUp(){
+    if(!moving) return;
+    delete body.dataset.drag;
+    var pos=getComputedStyle(body).backgroundPosition.split(' ');
+    var nx=Math.round(parseFloat(pos[0])); var ny=Math.round(parseFloat(pos[1]));
+    baseX=nx; baseY=ny; localStorage.setItem(POSX, baseX); localStorage.setItem(POSY, baseY);
+    applyBg();
+  }
+  body.addEventListener('mousedown', onDown);
+  body.addEventListener('mousemove', onMove);
+  body.addEventListener('mouseup', onUp);
+  body.addEventListener('mouseleave', onUp);
+  body.addEventListener('touchstart', function(e){ onDown(e.touches[0]); });
+  body.addEventListener('touchmove', function(e){ onMove(e.touches[0]); e.preventDefault(); }, {passive:false});
+  body.addEventListener('touchend', onUp);
+  </script>
+
+  <!-- Patch scripts: IndexedDB + Viewer, poi il tuo script principale del planner -->
+  <script src="attachments-indexeddb.js"></script>
+  <script src="viewer.js"></script>
+  <script src="script.js"></script>
+
+  <!-- Stessa registrazione del Service Worker della home -->
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./service-worker.js',{scope:'./'});}</script>
 </body>
 </html>
