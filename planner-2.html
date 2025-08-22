@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Planner</title>
+  <!-- CSS principale del tema -->
+  <link rel="stylesheet" href="style.css">
+  <!-- CSS del viewer (aggiuntivo) -->
+  <link rel="stylesheet" href="viewer.css">
+</head>
+<body>
+  <div id="app">
+    <header class="bar">
+      <h2>Planner di viaggio</h2>
+      <div class="actions">
+        <button class="primary" id="btnAdd" type="button">➕ Aggiungi giorno</button>
+      </div>
+    </header>
+    <main id="planner" aria-live="polite"></main>
+  </div>
+
+  <div class="viewer" id="viewer">
+    <div class="inner">
+      <div class="vtoolbar">
+        <button class="vbtn" id="vtFit" title="Adatta">⤢</button>
+        <button class="vbtn" id="vtZoomIn" title="Zoom +">＋</button>
+        <button class="vbtn" id="vtZoomOut" title="Zoom −">－</button>
+        <button class="vbtn" id="vtRotate" title="Ruota">⟳</button>
+        <button class="vbtn" id="vtNewTab" title="Apri in nuova scheda">↗︎</button>
+        <a class="vbtn" id="vtDownload" title="Scarica" download>⬇︎</a>
+        <button class="vbtn close" id="viewerClose" title="Chiudi">✕</button>
+      </div>
+      <div id="viewerContent"></div>
+    </div>
+  </div>
+
+  <!-- Ordine corretto degli script: IndexedDB, Viewer, poi il main -->
+  <script src="attachments-indexeddb.js"></script>
+  <script src="viewer.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
