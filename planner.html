@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Planner</title>
-  <link rel="stylesheet" href="viewer.css">
+  <link rel="stylesheet" href="style.css?v=iv2">
+  <link rel="stylesheet" href="viewer.css?v=iv2">
 </head>
 <body>
   <div id="app">
@@ -32,9 +33,9 @@
     </div>
   </div>
 
-  <!-- Ordine corretto degli script: IndexedDB prima, poi viewer, poi il tuo main -->
-  <script src="attachments-indexeddb.js"></script>
-  <script src="viewer.js"></script>
-  <script src="script.js"></script>
+  <!-- Ordine corretto + cache-bust -->
+  <script src="attachments-indexeddb.js?v=iv2"></script>
+  <script src="viewer.js?v=iv2"></script>
+  <script src="script.js?v=iv2"></script>
 </body>
 </html>
