@@ -1,51 +1,56 @@
 (function(){
-  const viewer=document.createElement('div');
-  viewer.className='viewer'; viewer.id='viewer';
-  viewer.innerHTML=`<div class="inner">
-    <div class="vtoolbar">
-      <button class="vbtn" id="vtFit" title="Adatta">⤢</button>
-      <button class="vbtn" id="vtZoomIn" title="Zoom +">＋</button>
-      <button class="vbtn" id="vtZoomOut" title="Zoom −">－</button>
-      <button class="vbtn" id="vtRotate" title="Ruota">⟳</button>
-      <button class="vbtn" id="vtNewTab" title="Apri in nuova scheda">↗︎</button>
-      <a class="vbtn" id="vtDownload" title="Scarica" download>⬇︎</a>
-      <button class="vbtn" id="viewerClose" title="Chiudi">✕</button>
-    </div>
-    <div id="viewerContent"></div>
-  </div>`;
-  document.addEventListener('DOMContentLoaded',()=>document.body.appendChild(viewer));
+  const el = (id)=>document.getElementById(id);
+  const viewer = el('viewer');
+  const content = el('viewerContent');
+  const btnClose = el('viewerClose');
+  const btnFit = el('vtFit');
+  const btnIn = el('vtZoomIn');
+  const btnOut = el('vtZoomOut');
+  const btnRot = el('vtRotate');
+  const btnNew = el('vtNewTab');
+  const aDl = el('vtDownload');
+  let scale = 1, rot = 0, currentSrc = null;
 
-  const viewerContent = ()=>document.getElementById('viewerContent');
-  const btn = id=>document.getElementById(id);
+  function show(src, mime){
+    content.innerHTML = '';
+    currentSrc = src;
+    aDl.href = src;
+    if(mime && mime.includes('pdf')){
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.setAttribute('title','Anteprima PDF');
+      content.appendChild(iframe);
+    }else{
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Allegato';
+      content.appendChild(img);
+    }
+    scale = 1; rot = 0;
+    apply();
+    viewer.classList.add('show');
+    viewer.setAttribute('aria-hidden','false');
+  }
 
-  let stage=null, scale=1, rot=0, panX=0, panY=0, startX=0, startY=0, isPanning=false;
+  function hide(){
+    viewer.classList.remove('show');
+    viewer.setAttribute('aria-hidden','true');
+    content.innerHTML='';
+  }
 
-  function apply(){ if(stage){ stage.style.transform=`translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${scale}) rotate(${rot}deg)`; } }
-  function reset(){ scale=1; rot=0; panX=0; panY=0; apply(); }
-  function openNode(node, url){
-    viewerContent().innerHTML=''; viewerContent().appendChild(node);
-    document.getElementById('viewer').classList.add('open');
-    const n=btn('vtNewTab'), d=btn('vtDownload');
-    if(url){ n.onclick=()=>window.open(url,'_blank'); d.href=url; } else { n.onclick=null; d.removeAttribute('href'); }
+  function apply(){
+    const node = content.firstElementChild;
+    if(!node) return;
+    node.style.transform = `scale(${scale}) rotate(${rot}deg)`;
   }
-  function openImage(url){
-    const wrap=document.createElement('div'); wrap.className='stage';
-    const img=document.createElement('img'); img.className='stage-img'; img.src=url; wrap.appendChild(img);
-    openNode(wrap,url); stage=wrap; reset();
-    const vc=viewerContent();
-    vc.onmousedown=e=>{ isPanning=true; startX=e.clientX; startY=e.clientY; };
-    vc.onmousemove=e=>{ if(!isPanning) return; panX+=e.clientX-startX; panY+=e.clientY-startY; startX=e.clientX; startY=e.clientY; apply(); };
-    vc.onmouseup=vc.onmouseleave=()=>{ isPanning=false; };
-    vc.ondblclick=()=>{ scale=(scale===1?1.8:1); panX=0; panY=0; apply(); };
-    btn('vtZoomIn').onclick=()=>{ scale=Math.min(6,scale+0.2); apply(); };
-    btn('vtZoomOut').onclick=()=>{ scale=Math.max(0.2,scale-0.2); apply(); };
-    btn('vtFit').onclick=()=>{ reset(); };
-    btn('vtRotate').onclick=()=>{ rot=(rot+90)%360; apply(); };
-    btn('viewerClose').onclick=()=>{ document.getElementById('viewer').classList.remove('open'); viewerContent().innerHTML=''; stage=null; };
-  }
-  function openPdf(url){
-    try{ const emb=document.createElement('embed'); emb.type='application/pdf'; emb.src=url; openNode(emb,url); }
-    catch(e){ window.open(url,'_blank'); }
-  }
-  window.Viewer={openImage, openPdf};
+
+  btnFit.addEventListener('click',()=>{ scale = 1; rot = 0; apply(); });
+  btnIn.addEventListener('click',()=>{ scale = Math.min(5, scale + 0.15); apply(); });
+  btnOut.addEventListener('click',()=>{ scale = Math.max(0.2, scale - 0.15); apply(); });
+  btnRot.addEventListener('click',()=>{ rot = (rot + 90) % 360; apply(); });
+  btnNew.addEventListener('click',()=>{ if(currentSrc) window.open(currentSrc,'_blank'); });
+  btnClose.addEventListener('click', hide);
+  viewer.addEventListener('click', (e)=>{ if(e.target === viewer) hide(); });
+
+  window.InlineViewer = { open: show, close: hide };
 })();
